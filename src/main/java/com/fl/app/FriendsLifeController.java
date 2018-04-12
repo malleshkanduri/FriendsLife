@@ -1,4 +1,4 @@
-package com.fl;
+package com.fl.app;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class WelcomeController {
+public class FriendsLifeController {
 
 	/*@Value("${welcome.message:test}")
 	private String message = "Hello World";
