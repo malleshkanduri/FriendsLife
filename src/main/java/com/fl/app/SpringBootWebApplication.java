@@ -7,7 +7,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"com.fl.dao", "com.fl.service", "com.fl.app" })
+@ComponentScan({"com.fl.dao", "com.fl.service", "com.fl.app", "com.fl.storage", "com.fl.exception" })
 public class SpringBootWebApplication extends SpringBootServletInitializer {
 
 	@Override
