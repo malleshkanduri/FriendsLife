@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fl.model.Category;
-import com.fl.model.Friend;
 import com.fl.service.FriendsLifeService;
 
 @RestController
@@ -16,6 +16,9 @@ public class FriendsLifeAPI {
 
 	@Autowired
 	private FriendsLifeService service;
+	
+	@Autowired
+    private JdbcTemplate jdbcTemplate;
 	
 	Logger logger = Logger.getLogger(FriendsLifeAPI.class);
 	
@@ -26,10 +29,9 @@ public class FriendsLifeAPI {
 	}
 	
 	@RequestMapping("/friends")
-	public Friend getFriends() {
+	public String getFriends() {
 		//System.out.println("service value" + service.getClass());
-		Friend friend = new Friend("kanduri1", 25, "Male");
-		return friend;
+		return "Hellow" + jdbcTemplate;
 	}
 	
 }
