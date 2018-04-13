@@ -3,7 +3,14 @@ package com.fl.model;
 public class User {
 	String username;
 	private String id;
+	String token;
 	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public String getUsername() {
 		return username;
 	}
