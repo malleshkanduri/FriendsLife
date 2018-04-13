@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -47,6 +46,20 @@ public class ReqFilter implements Filter {
 		String deleteLeadingSlashes = deleteLeadingSlashes(uri);
 
 		logger.info("URI " + uri + " After Deleting leading slashes" + deleteLeadingSlashes);
+		HttpServletResponse res = (HttpServletResponse) response;
+		
+		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+		res.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD, OPTIONS");
+		res.addHeader("Access-Control-Allow-Credentials", "true");
+		res.addHeader("Access-Control-Allow-Headers", "accept, origin, content-type, x-requested-with, Authorization");
+		res.addHeader("Access-Control-Expose-Headers", "location");
+		
+		String method  = req.getMethod();
+		System.out.println("-----------> method" + method);
+		if(method.equals("OPTIONS")) {
+			res.setStatus(200);
+			return;
+		}
 		
 		// validate security for url pattern SECURE_URI_WITH_PATTERN
 		if (deleteLeadingSlashes.startsWith(SECURE_URI_WITH_PATTERN)) {
@@ -54,11 +67,14 @@ public class ReqFilter implements Filter {
 			HttpSession session = null;
 			
 			String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
+
+			System.out.println("--------------> Auth is " + authorization);
 			if (authorization  != null) {
 				session = SessionTracker.getSession(authorization);
 			}
 			
 			if (session == null) {
+				System.out.println("--------------> Session si null");
 				// invalid or token expired.. send bad request error
 				HttpServletResponse resp = (HttpServletResponse) response;
 				resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

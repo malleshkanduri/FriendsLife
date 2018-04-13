@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fl.model.Category;
@@ -27,9 +28,8 @@ public class FriendsLifeAPI {
 	Logger logger = Logger.getLogger(FriendsLifeAPI.class);
 	
 	@RequestMapping("/category") 
-	public List<Category> getAllCategories(HttpServletResponse response) {
+	public List<Category> getAllCategories(HttpServletResponse res) {
 		logger.info("service " + service);
-		response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		return service.getCategories();
 	}
 	
@@ -39,7 +39,7 @@ public class FriendsLifeAPI {
 	}
 	
 	@RequestMapping("/friends")
-	public List<Friend> getFriends() {
+	public List<Friend> getFriends(HttpServletResponse res) {
 		return service.getFriends();
 	}
 	@PostMapping("/createFriend")
@@ -53,7 +53,13 @@ public class FriendsLifeAPI {
 	}
 	
 	@PostMapping("/friendDays")
-	public Days getFriendDays(@RequestBody String friendId) {
-		return null;
+	public String getFriendDays(@RequestBody String friendId) {
+		return friendId;
 	}
+	
+	@PostMapping("/createFriendDayPref")
+	public String createFriendDayPreferences(@RequestParam String frndId, @RequestBody Days days) {
+		return frndId + days;
+	}
+	
 }
