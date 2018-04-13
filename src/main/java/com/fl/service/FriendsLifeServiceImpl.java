@@ -5,11 +5,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fl.dao.AdminDaoImpl;
 import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
+import com.fl.model.FriendDayPreferences;
 import com.fl.model.FriendExistException;
 
 @Service
@@ -45,4 +48,16 @@ public class FriendsLifeServiceImpl implements FriendsLifeService {
 	public String updateFriend(Friend friend) {
 		return dao.updateFriend(friend);
 	}
+	
+	@Override
+	public String createFriendDayPreferences(FriendDayPreferences frndDayPref) {
+		return dao.createFriendDayPreferences(frndDayPref.getFriendId(), frndDayPref.getDays());
+	}
+	
+	@Override
+	public List<Day> getFriendDayPreference(String frndId) {
+		return dao.getFriendDayPreference(frndId);
+	}
+	
+	
 }

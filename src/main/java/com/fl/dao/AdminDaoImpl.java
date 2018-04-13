@@ -14,9 +14,9 @@ import org.springframework.stereotype.Repository;
 import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
-import com.fl.model.FriendDatePreference;
-import com.fl.model.User;
+import com.fl.model.FriendDayPreferences;
 import com.fl.model.FriendExistException;
+import com.fl.model.User;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
@@ -44,6 +44,15 @@ public class AdminDaoImpl implements AdminDao {
 	
 	private String GET_FRIEND_BY_ID = "SElECT * FROM public.friends WHERE id = ?";
 	
+	private String CREATE_FRIEND_DAY_PREF = "INSERT INTO public.friend_days( created_at, updated_at, day_id, friend_id) "
+			+ "VALUES (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, (SELECT id FROM public.days where day = ? and slot =?), ?)";
+	
+
+	private String DELETE_FRIEND_DAY_PREF = "DELETE from public.friend_days where friend_id = ?";
+	
+	private String GET_FRND_DAY_PREF = "SELECT id, day, slot FROM public.days D\r\n" + 
+			"inner join public.friend_days FD on FD.day_id = D.id\r\n" + 
+			"where fd.friend_id = ?";
 	
 	@Override
 	public List<Category> getCategories() {
@@ -92,10 +101,13 @@ public class AdminDaoImpl implements AdminDao {
 	}
 
 	@Override
-	public FriendDatePreference getFriendDatePreference(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Day> getFriendDayPreference(String id) {
+		
+		Object[] inputs = {id};
+		int[] types = {Types.NUMERIC};
+		return jdbcTemplate.query(GET_FRND_DAY_PREF, inputs, types, new DayMapper());
 	}
+	
 	@Override
 	public String createFriend(Friend friend) throws FriendExistException {
 		Object[] inputs = {friend.getFirstName(), friend.getLastName(), friend.getNickName()};
@@ -119,16 +131,18 @@ public class AdminDaoImpl implements AdminDao {
 	
 
 	@Override
-	public String createFriendDayPreferences(int frndId, List<Day> dayPrefs) {
-		return null;
+	public String createFriendDayPreferences(String frndId, List<Day> dayPrefs) {
+		Object[] inputs1 = {frndId};
+		int[] types1 = {Types.NUMERIC};
+		jdbcTemplate.update(DELETE_FRIEND_DAY_PREF, inputs1, types1);
+		for( Day day : dayPrefs) {
+			Object[] inputs = {day.getDayOfTheWeek(), day.getAmPm(), frndId};
+			int[] types = {Types.VARCHAR, Types.VARCHAR, Types.NUMERIC};
+			jdbcTemplate.update(CREATE_FRIEND_DAY_PREF, inputs, types);
+		}
+		return frndId;
 	}
-
-	@Override
-	public List<Day> getFriendDays(String friendId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public User getUser(String loginId, String password) {
 		
@@ -171,6 +185,17 @@ public class AdminDaoImpl implements AdminDao {
 	        friend.setFirstName(rs.getString("first_name"));
 	        friend.setLastName(rs.getString("last_name"));
 	        friend.setNickName(rs.getString("nick_name"));
+	        return friend;
+	    }
+	}
+	
+	private static final class DayMapper implements RowMapper<Day> {
+	    @Override
+	    public Day mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    	Day friend = new Day();
+	        friend.setId(rs.getString("id"));
+	        friend.setDayOfTheWeek(rs.getString("day"));
+	        friend.setAmPm(rs.getString("slot"));
 	        return friend;
 	    }
 	}

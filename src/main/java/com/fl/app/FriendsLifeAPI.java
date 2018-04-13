@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fl.model.Category;
+import com.fl.model.Day;
 import com.fl.model.Days;
 import com.fl.model.Friend;
+import com.fl.model.FriendDayPreferences;
 import com.fl.model.FriendExistException;
 import com.fl.service.FriendsLifeService;
 
@@ -58,8 +60,13 @@ public class FriendsLifeAPI {
 	}
 	
 	@PostMapping("/createFriendDayPref")
-	public String createFriendDayPreferences(@RequestParam String frndId, @RequestBody Days days) {
-		return frndId + days;
+	public String createFriendDayPreferences(@RequestBody FriendDayPreferences frndDayPref) {
+		return service.createFriendDayPreferences(frndDayPref);
+	}
+	
+	@PostMapping("/friendDayPref")
+	public List<Day> getFriendDayPref(@RequestParam String frndId) {
+		return service.getFriendDayPreference(frndId);
 	}
 	
 }

@@ -5,9 +5,9 @@ import java.util.List;
 import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
-import com.fl.model.FriendDatePreference;
-import com.fl.model.User;
+import com.fl.model.FriendDayPreferences;
 import com.fl.model.FriendExistException;
+import com.fl.model.User;
 
 public interface AdminDao {
 	List<Category> getCategories();
@@ -18,8 +18,7 @@ public interface AdminDao {
 	String updateFriend(Friend friend);
 	String createFriend(Friend friend) throws FriendExistException;
 	
-	FriendDatePreference getFriendDatePreference(String id);
-	List<Day> getFriendDays(String friendId);
+	List<Day> getFriendDayPreference(String id);
 	User getUser(String loginId, String passwprd);
-	String createFriendDayPreferences(int frndId, List<Day> dayPrefs);
+	String createFriendDayPreferences(String frndId, List<Day> dayPrefs);
 }
