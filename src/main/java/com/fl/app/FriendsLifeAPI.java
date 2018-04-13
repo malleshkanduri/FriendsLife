@@ -29,6 +29,8 @@ public class FriendsLifeAPI {
 	@RequestMapping("/category") 
 	public List<Category> getAllCategories(HttpServletResponse response) {
 		logger.info("service " + service);
+//		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Vary", "Origin");
 		response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		return service.getCategories();
 	}
@@ -39,7 +41,9 @@ public class FriendsLifeAPI {
 	}
 	
 	@RequestMapping("/friends")
-	public List<Friend> getFriends() {
+	public List<Friend> getFriends(HttpServletResponse response) {
+		response.addHeader("Vary", "Origin");
+		response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		return service.getFriends();
 	}
 	@PostMapping("/createFriend")

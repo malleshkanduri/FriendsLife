@@ -38,7 +38,8 @@ public class LoginAPI {
 		int hashCode = password.hashCode();
 		
 		User user;
-		
+		res.addHeader("Vary", "Origin");
+		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		try {
 			user = userService.getUser(loginId, ""+hashCode);
 		} catch (Exception e) {
@@ -52,7 +53,6 @@ public class LoginAPI {
 			res.addHeader("token", currentSession.getId());
 			return user;
 		}
-		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		throw new RuntimeException("Login failed");
 	}
 	
