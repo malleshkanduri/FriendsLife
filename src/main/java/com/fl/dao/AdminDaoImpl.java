@@ -1,19 +1,14 @@
 package com.fl.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.fl.model.Category;
@@ -21,14 +16,13 @@ import com.fl.model.Day;
 import com.fl.model.Friend;
 import com.fl.model.FriendDatePreference;
 import com.fl.model.User;
+import com.fl.model.FriendExistException;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
 
 	@Autowired
     private JdbcTemplate jdbcTemplate;
-	
-	static TestData testdata = new TestData();
 	
 	private String GET_ALL_CATEGORIES="SELECT id, name, picture, active FROM public.categories";
 
@@ -40,8 +34,16 @@ public class AdminDaoImpl implements AdminDao {
 	
 	private String CREATE_FRIEND = "INSERT INTO public.friends(first_name, last_name, nick_name, created_at, updated_at)\r\n" + 
 			"	VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+	
+	private String UPDATE_FRIEND = "UPDATE public.friends set first_name = ?, last_name = ?, nick_name = ? where id = ?";
 
 	private String GET_USER = "SELECT * from public.users where username = ? and password = ?";
+	private String GET_FRIEND_ID_BY_NAME = "SElECT ID FROM public.friends WHERE first_name = ? and last_name = ? and nick_name = ? ";
+	
+	private String GET_ALL_FRIENDs = "SElECT * FROM public.friends";
+	
+	private String GET_FRIEND_BY_ID = "SElECT * FROM public.friends WHERE id = ?";
+	
 	
 	@Override
 	public List<Category> getCategories() {
@@ -79,14 +81,14 @@ public class AdminDaoImpl implements AdminDao {
 
 	@Override
 	public List<Friend> getFriends() {
-		// TODO Auto-generated method stub
-		return null;
+		return jdbcTemplate.query(GET_ALL_FRIENDs, new FriendMapper());
 	}
 
 	@Override
 	public Friend getFriend(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		Object[] inputs = {id};
+		int[] types = {Types.NUMERIC};
+		return jdbcTemplate.queryForObject(GET_FRIEND_BY_ID, inputs, types, new FriendMapper());
 	}
 
 	@Override
@@ -95,23 +97,30 @@ public class AdminDaoImpl implements AdminDao {
 		return null;
 	}
 	@Override
-	public int createFriend(Friend friend) {
-		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {           
-		                @Override
-		                public PreparedStatement createPreparedStatement(Connection connection)
-		                        throws SQLException {
-		                    PreparedStatement ps = connection.prepareStatement(CREATE_FRIEND,
-		                        Statement.RETURN_GENERATED_KEYS); 
-		                    ps.setString(1, friend.getFirstName());
-		                    ps.setString(2, friend.getLastName());
-		                    ps.setString(3, friend.getNickName());
-		                    return ps;
-		                }
-		            }, holder);
+	public String createFriend(Friend friend) throws FriendExistException {
+		Object[] inputs = {friend.getFirstName(), friend.getLastName(), friend.getNickName()};
+		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+		try {
+			String frndId = jdbcTemplate.queryForObject(GET_FRIEND_ID_BY_NAME, inputs, types, String.class);
+			if (frndId == null || frndId.trim().length() > 0) {
+				throw new FriendExistException("Friend Existing with given details");
+			}
+		} catch (EmptyResultDataAccessException e) {}
+		jdbcTemplate.update(CREATE_FRIEND, inputs, types);
+		return jdbcTemplate.queryForObject(GET_FRIEND_ID_BY_NAME, inputs, types, String.class);
+	}
+	@Override
+	public String updateFriend(Friend friend) {
+		Object[] inputs = {friend.getFirstName(), friend.getLastName(), friend.getNickName(), friend.getId()};
+		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+		jdbcTemplate.update(UPDATE_FRIEND, inputs, types);
+		return String.valueOf(friend.getId());
+	}
+	
 
-		Long newPersonId = holder.getKey().longValue();
-		return newPersonId.intValue();
+	@Override
+	public String createFriendDayPreferences(int frndId, List<Day> dayPrefs) {
+		return null;
 	}
 
 	@Override
@@ -151,6 +160,18 @@ public class AdminDaoImpl implements AdminDao {
 		    user.setid(rs.getString("id"));
 		        
 	        return user;
+	    }
+	}
+	
+	private static final class FriendMapper implements RowMapper<Friend> {
+	    @Override
+	    public Friend mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    	Friend friend = new Friend();
+	        friend.setId(rs.getInt("id"));
+	        friend.setFirstName(rs.getString("first_name"));
+	        friend.setLastName(rs.getString("last_name"));
+	        friend.setNickName(rs.getString("nick_name"));
+	        return friend;
 	    }
 	}
 	

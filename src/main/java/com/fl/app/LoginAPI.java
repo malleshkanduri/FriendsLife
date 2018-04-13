@@ -52,7 +52,7 @@ public class LoginAPI {
 			res.addHeader("token", currentSession.getId());
 			return user;
 		}
-
+		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		throw new RuntimeException("Login failed");
 	}
 	
