@@ -50,6 +50,7 @@ public class LoginAPI {
 			currentSession.setAttribute("loginId", loginId);
 			SessionTracker.addSession(currentSession);
 			res.addHeader("token", currentSession.getId());
+			user.setToken(currentSession.getId());
 			return user;
 		}
 		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
