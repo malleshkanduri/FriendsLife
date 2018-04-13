@@ -46,13 +46,8 @@ public class FriendsLifeAPI {
 		return service.createFriend(friend);
 	}
 	
-	@PostMapping("/createFriend2")
-	public String createFriend2(@RequestBody String friend) {
-		return friend;
-	}
-	
 	@PostMapping("/friendDays")
-	public String getFriendDays(@RequestBody String friendId) {
-		return friendId;
+	public Days getFriendDays(@RequestBody String friendId) {
+		return null;
 	}
 }

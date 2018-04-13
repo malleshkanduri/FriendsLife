@@ -1,13 +1,19 @@
 package com.fl.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.fl.model.Category;
@@ -88,10 +94,28 @@ public class AdminDaoImpl implements AdminDao {
 	}
 	@Override
 	public int createFriend(Friend friend) {
-		Object[] inputs = {friend.getFirstName(), friend.getLastName(), friend.getNickName()};
-		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
-		jdbcTemplate.update(CREATE_FRIEND, inputs, types);
-		return 11;
+		KeyHolder holder = new GeneratedKeyHolder();
+		jdbcTemplate.update(new PreparedStatementCreator() {           
+		                @Override
+		                public PreparedStatement createPreparedStatement(Connection connection)
+		                        throws SQLException {
+		                    PreparedStatement ps = connection.prepareStatement(CREATE_FRIEND,
+		                        Statement.RETURN_GENERATED_KEYS); 
+		                    ps.setString(1, friend.getFirstName());
+		                    ps.setString(2, friend.getLastName());
+		                    ps.setString(3, friend.getNickName());
+		                    return ps;
+		                }
+		            }, holder);
+
+		Long newPersonId = holder.getKey().longValue();
+		return newPersonId.intValue();
+	}
+
+	@Override
+	public List<Day> getFriendDays(String friendId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
