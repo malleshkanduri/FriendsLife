@@ -32,22 +32,6 @@ public class FriendsLifeAPI {
 		return service.getCategories();
 	}
 	
-	@RequestMapping("/categories") 
-	public List<Category> getCategories() {
-		List<Category> cat = service.getCategories();
-		System.out.println("Categories " + cat);
-		System.out.println("Categories " + cat.size());
-		
-		cat = new ArrayList<>();
-		cat.add(new Category("9", "New Cat"));
-		cat.add(new Category("10", "New Cat 2"));
-		cat.add(new Category("11", "New Cat 3"));
-		
-		
-		
-		return cat;
-	}
-	
 	@PostMapping("/categoriesByDays")
 	public List<Category> getCategoriesByDays(@RequestBody Days days) {
 		return service.getCategoriesByDays(days.getDays());
@@ -58,8 +42,8 @@ public class FriendsLifeAPI {
 		return service.getFriends();
 	}
 	@PostMapping("/createFriend")
-	public Friend createFriend(@RequestBody Friend friend) {
-		return friend;
+	public int createFriend(@RequestBody Friend friend) {
+		return service.createFriend(friend);
 	}
 	
 	@PostMapping("/createFriend2")
