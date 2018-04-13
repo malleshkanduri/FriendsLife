@@ -1,8 +1,21 @@
 package com.fl.model;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
+
+	private static final long serialVersionUID = 2228514779598193016L;
+	
 	String id;
 	String name;
+	boolean active;
+	
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 	public String getId() {
 		return id;
 	}
@@ -21,8 +34,5 @@ public class Category {
 		this.id = id;
 		this.name = name;
 	}
-	
 	public Category() {}
-	
-	
 }

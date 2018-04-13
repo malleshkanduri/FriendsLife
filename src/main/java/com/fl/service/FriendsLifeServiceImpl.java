@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.fl.dao.AdminDaoImpl;
 import com.fl.model.Category;
+import com.fl.model.Day;
+import com.fl.model.Friend;
 
 @Service
 public class FriendsLifeServiceImpl implements FriendsLifeService {
@@ -21,5 +23,15 @@ public class FriendsLifeServiceImpl implements FriendsLifeService {
 	public List<Category> getCategories() {
 		logger.info("dao "  + dao );
 		return dao.getCategories();
+	}
+
+	@Override
+	public List<Friend> getFriends() {
+		return dao.getFriends();
+	}
+
+	@Override
+	public List<Category> getCategoriesByDays(List<Day> days) {
+		return dao.getCategories(days);
 	}
 }
