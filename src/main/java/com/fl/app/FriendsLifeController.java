@@ -2,6 +2,9 @@ package com.fl.app;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +24,19 @@ public class FriendsLifeController {
 		return "welcome";
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	@RequestMapping(value="/login-old", method=RequestMethod.GET)
 	
 	public String authenticateUser( @RequestParam("loginId") String loginId,
 									@RequestParam("password") String password,
-									Model model) {
+									Model model, HttpServletRequest req) {
 		System.out.println("loginId" + loginId + " password " + password);
+		
+		HttpSession oldSession = req.getSession(false);
+		if (oldSession != null) {
+			oldSession.invalidate();
+		}
+		HttpSession currentSession = req.getSession();
+		currentSession.setAttribute("loginId", loginId);
 		
 		model.addAttribute("loginId_value", loginId);
 		
