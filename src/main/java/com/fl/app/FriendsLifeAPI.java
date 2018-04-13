@@ -1,6 +1,5 @@
 package com.fl.app;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fl.model.Category;
 import com.fl.model.Days;
 import com.fl.model.Friend;
+import com.fl.model.FriendExistException;
 import com.fl.service.FriendsLifeService;
 
 @RestController
@@ -42,7 +42,7 @@ public class FriendsLifeAPI {
 		return service.getFriends();
 	}
 	@PostMapping("/createFriend")
-	public int createFriend(@RequestBody Friend friend) {
+	public String createFriend(@RequestBody Friend friend) throws FriendExistException {
 		return service.createFriend(friend);
 	}
 	

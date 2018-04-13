@@ -10,6 +10,7 @@ import com.fl.dao.AdminDaoImpl;
 import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
+import com.fl.model.FriendExistException;
 
 @Service
 public class FriendsLifeServiceImpl implements FriendsLifeService {
@@ -36,7 +37,7 @@ public class FriendsLifeServiceImpl implements FriendsLifeService {
 	}
 
 	@Override
-	public int createFriend(Friend friend) {
+	public String createFriend(Friend friend) throws FriendExistException {
 		return dao.createFriend(friend);
 	}
 }
