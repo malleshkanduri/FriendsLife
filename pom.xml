@@ -54,6 +54,12 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>9.1-901.jdbc4</version>
+		</dependency>
 
 		<!-- Need this to compile JSP, 
 			tomcat-embed-jasper version is not working, no idea why -->
