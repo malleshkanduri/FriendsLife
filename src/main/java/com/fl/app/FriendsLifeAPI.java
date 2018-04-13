@@ -2,9 +2,10 @@ package com.fl.app;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,6 @@ import com.fl.model.FriendExistException;
 import com.fl.service.FriendsLifeService;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/fl")
 public class FriendsLifeAPI {
 
@@ -27,8 +27,9 @@ public class FriendsLifeAPI {
 	Logger logger = Logger.getLogger(FriendsLifeAPI.class);
 	
 	@RequestMapping("/category") 
-	public List<Category> getAllCategories() {
+	public List<Category> getAllCategories(HttpServletResponse response) {
 		logger.info("service " + service);
+		response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 		return service.getCategories();
 	}
 	
@@ -44,6 +45,11 @@ public class FriendsLifeAPI {
 	@PostMapping("/createFriend")
 	public String createFriend(@RequestBody Friend friend) throws FriendExistException {
 		return service.createFriend(friend);
+	}
+	
+	@PostMapping("/updateFriend")
+	public String updateFriend(@RequestBody Friend friend) throws FriendExistException {
+		return service.updateFriend(friend);
 	}
 	
 	@PostMapping("/friendDays")

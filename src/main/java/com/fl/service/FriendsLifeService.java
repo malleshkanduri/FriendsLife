@@ -12,4 +12,6 @@ public interface FriendsLifeService {
 	List<Category> getCategoriesByDays(List<Day> days);
 	List<Friend> getFriends();
 	String createFriend(Friend friend) throws FriendExistException;
+	
+	String updateFriend(Friend friend);
 }

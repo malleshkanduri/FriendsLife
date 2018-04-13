@@ -11,9 +11,14 @@ import com.fl.model.FriendExistException;
 public interface AdminDao {
 	List<Category> getCategories();
 	List<Category> getCategories(List<Day> days);
+
 	List<Friend> getFriends();
 	Friend getFriend(String id);
-	FriendDatePreference getFriendDatePreference(String id);
+	String updateFriend(Friend friend);
 	String createFriend(Friend friend) throws FriendExistException;
+	
+	FriendDatePreference getFriendDatePreference(String id);
 	List<Day> getFriendDays(String friendId);
+	String createFriendDayPreferences(int frndId, List<Day> dayPrefs);
+	
 }

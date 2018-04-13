@@ -40,4 +40,9 @@ public class FriendsLifeServiceImpl implements FriendsLifeService {
 	public String createFriend(Friend friend) throws FriendExistException {
 		return dao.createFriend(friend);
 	}
+
+	@Override
+	public String updateFriend(Friend friend) {
+		return dao.updateFriend(friend);
+	}
 }

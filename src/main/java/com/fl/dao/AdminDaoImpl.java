@@ -33,6 +33,8 @@ public class AdminDaoImpl implements AdminDao {
 	
 	private String CREATE_FRIEND = "INSERT INTO public.friends(first_name, last_name, nick_name, created_at, updated_at)\r\n" + 
 			"	VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+	
+	private String UPDATE_FRIEND = "UPDATE public.friends set first_name = ?, last_name = ?, nick_name = ? where id = ?";
 
 	private String GET_FRIEND_ID_BY_NAME = "SElECT ID FROM public.friends WHERE first_name = ? and last_name = ? and nick_name = ? ";
 	
@@ -104,6 +106,19 @@ public class AdminDaoImpl implements AdminDao {
 		} catch (EmptyResultDataAccessException e) {}
 		jdbcTemplate.update(CREATE_FRIEND, inputs, types);
 		return jdbcTemplate.queryForObject(GET_FRIEND_ID_BY_NAME, inputs, types, String.class);
+	}
+	@Override
+	public String updateFriend(Friend friend) {
+		Object[] inputs = {friend.getFirstName(), friend.getLastName(), friend.getNickName(), friend.getId()};
+		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+		jdbcTemplate.update(UPDATE_FRIEND, inputs, types);
+		return String.valueOf(friend.getId());
+	}
+	
+
+	@Override
+	public String createFriendDayPreferences(int frndId, List<Day> dayPrefs) {
+		return null;
 	}
 
 	@Override
