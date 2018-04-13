@@ -18,6 +18,9 @@ public interface AdminDao {
 	String createFriend(Friend friend) throws FriendExistException;
 	
 	List<Day> getFriendDayPreference(String id);
-	User getUser(String loginId, String passwprd);
 	String createFriendDayPreferences(String frndId, List<Day> dayPrefs);
+	
+	
+
+	User getUser(String loginId, String passwprd);
 }
