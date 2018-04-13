@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fl.model.Category;
+import com.fl.model.Days;
+import com.fl.model.Friend;
 import com.fl.service.FriendsLifeService;
 
 @RestController
@@ -18,9 +21,6 @@ public class FriendsLifeAPI {
 	@Autowired
 	private FriendsLifeService service;
 	
-	@Autowired
-    private JdbcTemplate jdbcTemplate;
-	
 	Logger logger = Logger.getLogger(FriendsLifeAPI.class);
 	
 	@RequestMapping("/category") 
@@ -29,10 +29,13 @@ public class FriendsLifeAPI {
 		return service.getCategories();
 	}
 	
-	@RequestMapping("/friends")
-	public String getFriends() {
-		//System.out.println("service value" + service.getClass());
-		return "Hellow" + jdbcTemplate;
+	@PostMapping("/categoriesByDays")
+	public List<Category> getCategoriesByDays(@RequestBody Days days) {
+		return service.getCategoriesByDays(days.getDays());
 	}
 	
+	@RequestMapping("/friends")
+	public List<Friend> getFriends() {
+		return service.getFriends();
+	}
 }

@@ -3,37 +3,30 @@ package com.fl.model;
 import java.io.Serializable;
 
 public class Friend implements Serializable {
-	String name;
-	String sex;
-	int age;
-	
-	public Friend(String name, int age, String sex) {
-		super();
-		this.name = name;
-		this.age = age;
-		this.sex = sex;
-	}
 
-	public String getName() {
-		return name;
+	private static final long serialVersionUID = 377093108996580864L;
+	
+	String firstName;
+	String lastName;
+	String nickName;
+	
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public int getAge() {
-		return age;
+	public String getLastName() {
+		return lastName;
 	}
-	public void setAge(int age) {
-		this.age = age;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-	public String getSex() {
-		return sex;
+	public String getNickName() {
+		return nickName;
 	}
-	public void setSex(String sex) {
-		this.sex = sex;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
-	@Override
-	public String toString() {
-		return "Friend [name=" + name + ", age=" + age + ", sex=" + sex + "]";
-	}
+	
 }
