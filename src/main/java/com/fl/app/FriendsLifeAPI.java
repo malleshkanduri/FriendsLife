@@ -12,6 +12,7 @@ import com.fl.model.Category;
 import com.fl.service.FriendsLifeService;
 
 @RestController
+@RequestMapping("/fl")
 public class FriendsLifeAPI {
 
 	@Autowired

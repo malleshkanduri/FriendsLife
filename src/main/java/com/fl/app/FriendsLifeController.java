@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+
 public class FriendsLifeController {
 
 	/*@Value("${welcome.message:test}")
 	private String message = "Hello World";
 */
-	@RequestMapping("/testjsp")
+	@RequestMapping("/fl/testjsp")
 	public String welcome(Map<String, Object> model) {
 		//model.put("message", this.message);
 		return "welcome";
