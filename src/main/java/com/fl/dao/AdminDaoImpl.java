@@ -65,6 +65,7 @@ public class AdminDaoImpl implements AdminDao {
 	    	Category employee = new Category();
 	        employee.setId(rs.getString("id"));
 	        employee.setName(rs.getString("name"));
+	        employee.setPicture(rs.getString("picture"));
 	        employee.setActive(rs.getBoolean("active"));
 	        return employee;
 	    }

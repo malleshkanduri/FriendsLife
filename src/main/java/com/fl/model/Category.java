@@ -8,7 +8,15 @@ public class Category implements Serializable {
 	
 	String id;
 	String name;
+	String picture;
+
 	boolean active;
+	public String getPicture() {
+		return picture;
+	}
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 	
 	public boolean isActive() {
 		return active;

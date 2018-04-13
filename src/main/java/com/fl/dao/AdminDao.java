@@ -5,7 +5,6 @@ import java.util.List;
 import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
-import com.fl.model.FriendDayPreferences;
 import com.fl.model.FriendExistException;
 import com.fl.model.User;
 
