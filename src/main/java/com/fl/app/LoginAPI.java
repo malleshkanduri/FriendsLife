@@ -4,20 +4,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fl.model.User;
+import com.fl.service.UserService;
 import com.fl.util.SessionTracker;
 
 @RestController
 public class LoginAPI {
 	
-	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@Autowired
+	UserService userService;
 	
-	public String authenticateUser( @RequestParam("loginId") String loginId,
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public User authenticateUser( @RequestParam("loginId") String loginId,
 									@RequestParam("password") String password,
 									HttpServletRequest req ,
 									HttpServletResponse res  ) {
@@ -30,37 +35,43 @@ public class LoginAPI {
 			SessionTracker.deleteSession(id);
 			oldSession.invalidate();
 		}
+		int hashCode = password.hashCode();
 		
-		HttpSession currentSession = req.getSession();
-		currentSession.setAttribute("loginId", loginId);
-		SessionTracker.addSession(currentSession);
+		User user;
 		
-		res.addHeader("token", currentSession.getId());
-		
-		return "login success";
-	}
-	
-/*	@RequestMapping(value="/logout", method=RequestMethod.GET)
-	
-	public String logoutUser(HttpServletRequest req ,
-									HttpServletResponse res  ) {
-		
-		
-		HttpSession oldSession = req.getSession(false);
-		if (oldSession != null) {
-			String id = oldSession.getId();
-			SessionTracker.deleteSession(id);
-			oldSession.invalidate();
+		try {
+			user = userService.getUser(loginId, ""+hashCode);
+		} catch (Exception e) {
+			throw new RuntimeException("Login failed");
 		}
 		
-		HttpSession currentSession = req.getSession();
-		currentSession.setAttribute("loginId", loginId);
-		SessionTracker.addSession(currentSession);
+		if (user != null) {
+			HttpSession currentSession = req.getSession();
+			currentSession.setAttribute("loginId", loginId);
+			SessionTracker.addSession(currentSession);
+			res.addHeader("token", currentSession.getId());
+			return user;
+		}
+
+		throw new RuntimeException("Login failed");
+	}
+	
+	
+	@RequestMapping(value="/logout", method=RequestMethod.GET)
+	
+	public String logoutUser(HttpServletRequest req) {
 		
-		res.addHeader("token", currentSession.getId());
+		String authorizationHeader = req.getHeader(req.getHeader(HttpHeaders.AUTHORIZATION));
 		
-		return "login success";
-	}*/
+		HttpSession session = SessionTracker.getSession(authorizationHeader);
+
+		if (session != null) {
+			session.invalidate();
+			return "logout success";
+		}
+		
+		return "no valid session exists";
+	}
 	
 
 }

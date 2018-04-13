@@ -20,6 +20,7 @@ import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
 import com.fl.model.FriendDatePreference;
+import com.fl.model.User;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
@@ -40,6 +41,7 @@ public class AdminDaoImpl implements AdminDao {
 	private String CREATE_FRIEND = "INSERT INTO public.friends(first_name, last_name, nick_name, created_at, updated_at)\r\n" + 
 			"	VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 
+	private String GET_USER = "SELECT * from public.users where username = ? and password = ?";
 	
 	@Override
 	public List<Category> getCategories() {
@@ -116,6 +118,40 @@ public class AdminDaoImpl implements AdminDao {
 	public List<Day> getFriendDays(String friendId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public User getUser(String loginId, String password) {
+		
+		Object[] inputs = {loginId, password};
+		int[] type = {Types.VARCHAR, Types.VARCHAR};
+		
+		return jdbcTemplate.queryForObject(GET_USER, inputs, type, new userMapper());
+		
+		/*return jdbcTemplate.query(new PreparedStatementCreator() {           
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection)
+                    throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(CREATE_FRIEND,
+                    Statement.RETURN_GENERATED_KEYS); 
+                ps.setString(1, loginId);
+                ps.setString(2, password);
+                return ps;
+            }
+        },  new userMapper());*/
+		//return jdbcTemplate.query(GET_USER + whereClause.toString(), new CategoryMapper());
+	}
+	
+	private static final class userMapper implements RowMapper<User> {
+	    @Override
+	    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    	
+	    	User user = new User();
+		    user.setUsername(rs.getString("username"));
+		    user.setid(rs.getString("id"));
+		        
+	        return user;
+	    }
 	}
 	
 }

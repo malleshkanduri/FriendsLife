@@ -38,6 +38,8 @@ public class ReqFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
+		String authorizationa = req.getHeader(HttpHeaders.AUTHORIZATION);
+		logger.info("Authrization header" + authorizationa);
 		StringBuffer requestURL = req.getRequestURL();
 		logger.info(requestURL);
 		

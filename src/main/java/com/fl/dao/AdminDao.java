@@ -6,6 +6,7 @@ import com.fl.model.Category;
 import com.fl.model.Day;
 import com.fl.model.Friend;
 import com.fl.model.FriendDatePreference;
+import com.fl.model.User;
 
 public interface AdminDao {
 	List<Category> getCategories();
@@ -15,4 +16,5 @@ public interface AdminDao {
 	FriendDatePreference getFriendDatePreference(String id);
 	int createFriend(Friend friend);
 	List<Day> getFriendDays(String friendId);
+	User getUser(String loginId, String passwprd);
 }
