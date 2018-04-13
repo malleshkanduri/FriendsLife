@@ -38,8 +38,11 @@ public class LoginAPI {
 		int hashCode = password.hashCode();
 		
 		User user;
-		res.addHeader("Vary", "Origin");
-		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+//		res.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+//		res.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD, OPTIONS");
+//		res.addHeader("Access-Control-Allow-Credentials", "true");
+//		res.addHeader("Access-Control-Allow-Headers", "accept, origin, content-type, x-requested-with");
+//		res.addHeader("Access-Control-Expose-Headers", "location");
 		try {
 			user = userService.getUser(loginId, ""+hashCode);
 		} catch (Exception e) {

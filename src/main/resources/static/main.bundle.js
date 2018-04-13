@@ -954,7 +954,7 @@ var AdminService = /** @class */ (function () {
         });
     };
     AdminService.prototype.logIn = function (userId, pw) {
-        this.http.get("https://mighty-hollows-34327.herokuapp.com/login?loginId=" + userId + "&password=" + pw, {}).subscribe(function (data) {
+        this.http.post("https://mighty-hollows-34327.herokuapp.com/login?loginId=" + userId + "&password=" + pw, {}).subscribe(function (data) {
             console.log(data);
         });
     };
