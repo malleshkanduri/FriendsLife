@@ -2,6 +2,7 @@ package com.fl.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class AdminDaoImpl implements AdminDao {
 			"INNER JOIN public.classes C ON C.id = CD.class_id \n" + 
 			"INNER JOIN public.categories CAT ON CAT.id = C.category_id \n" + 
 			"where ";
+	
+	private String CREATE_FRIEND = "INSERT INTO public.friends(first_name, last_name, nick_name, created_at, updated_at)\r\n" + 
+			"	VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 
 	
 	@Override
@@ -81,6 +85,13 @@ public class AdminDaoImpl implements AdminDao {
 	public FriendDatePreference getFriendDatePreference(String id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public int createFriend(Friend friend) {
+		Object[] inputs = {friend.getFirstName(), friend.getLastName(), friend.getNickName()};
+		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+		jdbcTemplate.update(CREATE_FRIEND, inputs, types);
+		return 11;
 	}
 	
 }

@@ -10,4 +10,5 @@ public interface FriendsLifeService {
 	List<Category> getCategories();
 	List<Category> getCategoriesByDays(List<Day> days);
 	List<Friend> getFriends();
+	int createFriend(Friend friend);
 }

@@ -13,4 +13,5 @@ public interface AdminDao {
 	List<Friend> getFriends();
 	Friend getFriend(String id);
 	FriendDatePreference getFriendDatePreference(String id);
+	int createFriend(Friend friend);
 }

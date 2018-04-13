@@ -34,4 +34,9 @@ public class FriendsLifeServiceImpl implements FriendsLifeService {
 	public List<Category> getCategoriesByDays(List<Day> days) {
 		return dao.getCategories(days);
 	}
+
+	@Override
+	public int createFriend(Friend friend) {
+		return dao.createFriend(friend);
+	}
 }

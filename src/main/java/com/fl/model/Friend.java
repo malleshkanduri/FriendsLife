@@ -3,8 +3,6 @@ package com.fl.model;
 import java.io.Serializable;
 
 public class Friend implements Serializable {
-
-	private static final long serialVersionUID = 377093108996580864L;
 	
 	String firstName;
 	String lastName;
